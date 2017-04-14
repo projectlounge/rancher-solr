@@ -1,0 +1,34 @@
+version: '2'
+services:
+  zookeeper:
+    image: zookeeper
+    hostname: zookeeper
+    ports:
+    - 2181:2181/tcp
+    cpu_shares: 100
+  solr1:
+    image: solr
+    links:
+    - zookeeper:ZK
+    ports:
+    - 8983:8983/tcp
+    cpu_shares: 100
+    command:
+    - /opt/solr/bin/solr
+    - start
+    - -f
+    - -z
+    - zookeeper:2181
+  solr2:
+    image: solr
+    links:
+    - zookeeper:ZK
+    ports:
+    - 8984:8983/tcp
+    cpu_shares: 100
+    command:
+    - /opt/solr/bin/solr
+    - start
+    - -f
+    - -z
+    - zookeeper:2181
